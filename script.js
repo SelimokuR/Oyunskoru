@@ -250,10 +250,10 @@ if (previewBtn) previewBtn.addEventListener('click', () => {
 
 // Close Modal
 if (closeModal && previewModal) {
-    closeModal.addEventListener('click', () => {
-        previewModal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    });
+closeModal.addEventListener('click', () => {
+    previewModal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+});
 }
 
 // Close modal when clicking outside
@@ -270,26 +270,27 @@ if (articleForm) articleForm.addEventListener('submit', (e) => {
     
     const formData = new FormData(articleForm);
     function buildAndSaveArticle(imageOverride) {
-        const articleData = {
-            title: formData.get('title'),
-            category: formData.get('category'),
-            author: formData.get('author'),
-            excerpt: formData.get('excerpt'),
-            content: contentEditor.innerHTML,
+    const articleData = {
+        title: formData.get('title'),
+        category: formData.get('category'),
+        author: formData.get('author'),
+        excerpt: formData.get('excerpt'),
+        content: contentEditor.innerHTML,
             image: imageOverride || formData.get('image'),
-            date: new Date().toISOString(),
+            tags: (formData.get('tags') || '').split(',').map(t => t.trim()).filter(Boolean),
+        date: new Date().toISOString(),
             id: Date.now(),
             status: 'pending'
-        };
-        const errors = validateForm(articleData);
-        if (errors.length > 0) {
-            alert('Lütfen aşağıdaki alanları doldurun:\n' + errors.join('\n'));
-            return;
-        }
-        saveArticle(articleData);
+    };
+    const errors = validateForm(articleData);
+    if (errors.length > 0) {
+        alert('Lütfen aşağıdaki alanları doldurun:\n' + errors.join('\n'));
+        return;
+    }
+    saveArticle(articleData);
         showNotification('Yazınız moderatör onayına gönderildi!', 'success');
-        articleForm.reset();
-        contentEditor.innerHTML = '';
+    articleForm.reset();
+    contentEditor.innerHTML = '';
         document.getElementById('articles').scrollIntoView({ behavior: 'smooth' });
     }
     
@@ -332,9 +333,9 @@ function loadArticles() {
         const appendBatch = (count) => {
             const batch = articles.slice(nextIndex, nextIndex + count);
             batch.forEach((article) => {
-                const articleCard = createArticleCard(article);
-                articlesGrid.appendChild(articleCard);
-            });
+            const articleCard = createArticleCard(article);
+            articlesGrid.appendChild(articleCard);
+        });
             nextIndex += batch.length;
         };
         appendBatch(initial);
@@ -362,6 +363,7 @@ function createArticleCard(article) {
         </div>
         <div class="article-content">
             <h3>${article.title}</h3>
+            ${article.tags && article.tags.length ? `<div class="article-tags">${article.tags.map(t => `<span class=\"tag\">${t.startsWith('#') ? t : '#'+t}</span>`).join('')}</div>` : ''}
             <p>${article.excerpt}</p>
             <div class="article-meta">
                 <span class="author" style="display:none;"></span>
@@ -649,6 +651,51 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Users list and site stats in admin panel
+    const pendingList = document.getElementById('pendingList');
+    if (pendingList) {
+        const usersWrapId = 'usersWrap';
+        let usersWrap = document.getElementById(usersWrapId);
+        if (!usersWrap) {
+            usersWrap = document.createElement('div');
+            usersWrap.id = usersWrapId;
+            pendingList.parentElement.appendChild(usersWrap);
+        }
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        usersWrap.innerHTML = '<h3 style="margin:12px 0;">Üyeler</h3>' + (users.length ? `
+            <div style="overflow:auto;">
+            <table style="width:100%;border-collapse:collapse;">
+                <thead>
+                    <tr style="text-align:left;border-bottom:1px solid #e2e8f0;">
+                        <th style="padding:6px;">Kullanıcı Adı</th>
+                        <th style="padding:6px;">Yaş</th>
+                        <th style="padding:6px;">Cinsiyet</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${users.map(u => `<tr><td style=\"padding:6px;border-bottom:1px solid #f1f5f9;\">${u.username}</td><td style=\"padding:6px;border-bottom:1px solid #f1f5f9;\">${u.age ?? ''}</td><td style=\"padding:6px;border-bottom:1px solid #f1f5f9;\">${u.gender ?? ''}</td></tr>`).join('')}
+                </tbody>
+            </table>
+            </div>
+        ` : '<p>Henüz üye yok.</p>');
+
+        const statsWrapId = 'statsWrap';
+        let statsWrap = document.getElementById(statsWrapId);
+        if (!statsWrap) {
+            statsWrap = document.createElement('div');
+            statsWrap.id = statsWrapId;
+            pendingList.parentElement.appendChild(statsWrap);
+        }
+        const visits = parseInt(localStorage.getItem('siteVisitCount') || '0', 10);
+        const totalApproved = (JSON.parse(localStorage.getItem('articles') || '[]')).filter(a => a.status === 'approved').length;
+        statsWrap.innerHTML = `<h3 style="margin:12px 0;">Site İstatistikleri</h3>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <div style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:10px;padding:10px;">Toplam Ziyaret: <strong>${visits}</strong></div>
+            <div style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:10px;padding:10px;">Onaylı Yazı: <strong>${totalApproved}</strong></div>
+            <div style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:10px;padding:10px;">Üye Sayısı: <strong>${users.length}</strong></div>
+        </div>`;
+    }
 });
 
 // Admin: render and approve/reject pending posts
@@ -700,6 +747,55 @@ function renderPending() {
             showNotification('Yazı güncellendi.', 'success');
         }
         if (reject) {
+            all = all.filter(a => a.id !== id);
+            localStorage.setItem('articles', JSON.stringify(all));
+            showNotification('Yazı silindi.', 'info');
+        }
+        renderPending();
+        loadArticles();
+    };
+
+    // Approved posts management
+    const approvedWrapId = 'approvedWrap';
+    let approvedWrap = document.getElementById(approvedWrapId);
+    if (!approvedWrap) {
+        approvedWrap = document.createElement('div');
+        approvedWrap.id = approvedWrapId;
+        listEl.parentElement.appendChild(approvedWrap);
+    }
+    const approved = all.filter(a => a.status === 'approved');
+    approvedWrap.innerHTML = '<h3 style="margin:12px 0;">Onaylı Yazılar</h3>' + (approved.length ? approved.map(a => `
+        <div style="border:1px solid #e2e8f0;border-radius:10px;padding:10px;margin-bottom:10px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <strong>${a.title}</strong>
+                <span style="color:#718096;">${new Date(a.date).toLocaleString('tr-TR')}</span>
+            </div>
+            <div style="color:#4a5568;margin:6px 0;">${a.excerpt}</div>
+            <div style="display:flex;gap:8px;">
+                <button class="btn-edit-approved" data-id="${a.id}" style="border:none;background:#dbeafe;padding:6px 10px;border-radius:6px;cursor:pointer;">Düzenle</button>
+                <button class="btn-delete-approved" data-id="${a.id}" style="border:none;background:#fecaca;padding:6px 10px;border-radius:6px;cursor:pointer;">Sil</button>
+            </div>
+        </div>
+    `).join('') : '<p>Onaylı yazı yok.</p>');
+    approvedWrap.onclick = (e) => {
+        const edit = e.target.closest('.btn-edit-approved');
+        const del = e.target.closest('.btn-delete-approved');
+        if (!edit && !del) return;
+        let all = JSON.parse(localStorage.getItem('articles') || '[]');
+        const id = parseInt((edit || del).getAttribute('data-id'), 10);
+        if (edit) {
+            const a = all.find(x => x.id === id);
+            if (!a) return;
+            const newTitle = prompt('Başlık', a.title);
+            const newExcerpt = prompt('Özet', a.excerpt);
+            const newCategory = prompt('Kategori', a.category);
+            a.title = newTitle ?? a.title;
+            a.excerpt = newExcerpt ?? a.excerpt;
+            a.category = newCategory ?? a.category;
+            localStorage.setItem('articles', JSON.stringify(all));
+            showNotification('Yazı güncellendi.', 'success');
+        }
+        if (del) {
             all = all.filter(a => a.id !== id);
             localStorage.setItem('articles', JSON.stringify(all));
             showNotification('Yazı silindi.', 'info');

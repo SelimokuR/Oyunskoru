@@ -364,6 +364,20 @@ body {
     margin-bottom: 1rem;
     line-height: 1.6;
 }
+.article-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+.article-tags .tag {
+    background: #edf2f7;
+    color: #4a5568;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
 
 .article-meta {
     display: flex;
