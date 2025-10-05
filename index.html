@@ -3,262 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OyunSkoru - Spor Köşe Yazıları</title>
+    <title>SportBlog - Spor Köşe Yazıları</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* OyunSkoru Logo Styles */
-        .logo-container {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .gamescore-logo {
-            width: 40px;
-            height: 40px;
-            position: relative;
-            display: inline-block;
-        }
-        
-        .logo-quarter {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 8px;
-        }
-        
-        .logo-quarter.top-left {
-            top: 0;
-            left: 0;
-            background: #2d5016;
-            border-radius: 20px 0 0 0;
-        }
-        
-        .logo-quarter.top-right {
-            top: 0;
-            right: 0;
-            background: #7c3aed;
-            border-radius: 0 20px 0 0;
-        }
-        
-        .logo-quarter.bottom-left {
-            bottom: 0;
-            left: 0;
-            background: #1e40af;
-            border-radius: 0 0 0 20px;
-        }
-        
-        .logo-quarter.bottom-right {
-            bottom: 0;
-            right: 0;
-            background: #ea580c;
-            border-radius: 0 0 20px 0;
-        }
-        
-        .logo-text {
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: inherit;
-        }
-        
-        /* Footer logo adjustments */
-        .footer-logo .gamescore-logo {
-            width: 32px;
-            height: 32px;
-        }
-        
-        .footer-logo .logo-quarter {
-            width: 16px;
-            height: 16px;
-            font-size: 6px;
-        }
-        
-        .footer-logo .logo-quarter.top-left,
-        .footer-logo .logo-quarter.top-right,
-        .footer-logo .logo-quarter.bottom-left,
-        .footer-logo .logo-quarter.bottom-right {
-            border-radius: 16px 0 0 0;
-        }
-        
-        .footer-logo .logo-quarter.top-right {
-            border-radius: 0 16px 0 0;
-        }
-        
-        .footer-logo .logo-quarter.bottom-left {
-            border-radius: 0 0 0 16px;
-        }
-        
-        .footer-logo .logo-quarter.bottom-right {
-            border-radius: 0 0 16px 0;
-        }
-        
-        .footer-logo .logo-text {
-            font-size: 1.2rem;
-        }
-        
-        /* Logo hover effects */
-        .gamescore-logo:hover {
-            transform: scale(1.05);
-            transition: transform 0.2s ease;
-        }
-        
-        .logo-quarter {
-            transition: all 0.2s ease;
-        }
-        
-        .gamescore-logo:hover .logo-quarter {
-            transform: scale(1.1);
-        }
-        
-        /* Mobile responsive adjustments */
-        @media (max-width: 768px) {
-            .gamescore-logo {
-                width: 32px;
-                height: 32px;
-            }
-            
-            .logo-quarter {
-                width: 16px;
-                height: 16px;
-                font-size: 6px;
-            }
-            
-            .logo-quarter.top-left {
-                border-radius: 16px 0 0 0;
-            }
-            
-            .logo-quarter.top-right {
-                border-radius: 0 16px 0 0;
-            }
-            
-            .logo-quarter.bottom-left {
-                border-radius: 0 0 0 16px;
-            }
-            
-            .logo-quarter.bottom-right {
-                border-radius: 0 0 16px 0;
-            }
-            
-            .logo-text {
-                font-size: 1.3rem;
-            }
-        }
-        
-        /* Sports Categories Styles */
-        .sports-categories {
-            padding: 80px 0;
-            background: #f8fafc;
-        }
-        
-        .sports-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-        }
-        
-        .sport-card {
-            background: white;
-            padding: 40px 30px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-        
-        .sport-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-            border-color: #3b82f6;
-        }
-        
-        .sport-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 2rem;
-        }
-        
-        .sport-card h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #1e293b;
-        }
-        
-        .sport-card p {
-            color: #64748b;
-            font-size: 0.95rem;
-        }
-        
-        /* Sport-specific icon colors */
-        .sport-card[id="futbol"] .sport-icon {
-            background: linear-gradient(135deg, #10b981, #059669);
-        }
-        
-        .sport-card[id="basketbol"] .sport-icon {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-        }
-        
-        .sport-card[id="voleybol"] .sport-icon {
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-        }
-        
-        .sport-card[id="formula1"] .sport-icon {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-        }
-        
-        .sport-card[id="tenis"] .sport-icon {
-            background: linear-gradient(135deg, #06b6d4, #0891b2);
-        }
-        
-        .sport-card[id="snooker"] .sport-icon {
-            background: linear-gradient(135deg, #6b7280, #4b5563);
-        }
-    </style>
 </head>
 <body>
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
-            <div class="nav-logo logo-container">
-                <div class="gamescore-logo">
-                    <div class="logo-quarter top-left">
-                        <i class="fas fa-basketball-ball"></i>
-                    </div>
-                    <div class="logo-quarter top-right">
-                        <i class="fas fa-car"></i>
-                    </div>
-                    <div class="logo-quarter bottom-left">
-                        <i class="fas fa-table-tennis"></i>
-                    </div>
-                    <div class="logo-quarter bottom-right">
-                        <i class="fas fa-stopwatch"></i>
-                    </div>
-                </div>
-                <span class="logo-text">OyunSkoru</span>
+            <div class="nav-logo">
+                <i class="fas fa-futbol"></i>
+                <span>SportBlog</span>
             </div>
             <ul class="nav-menu">
                 <li><a href="#home">Ana Sayfa</a></li>
-                <li><a href="#futbol">Futbol</a></li>
-                <li><a href="#basketbol">Basketbol</a></li>
-                <li><a href="#voleybol">Voleybol</a></li>
-                <li><a href="#formula1">Formula 1</a></li>
-                <li><a href="#tenis">Tenis</a></li>
-                <li><a href="#snooker">Snooker</a></li>
+                <li><a href="#articles">Yazılar</a></li>
+                <li><a href="#write">Yazı Yaz</a></li>
+                <li><a href="#about">Hakkımda</a></li>
                 <li><a href="#contact">İletişim</a></li>
             </ul>
             <div class="hamburger">
@@ -275,8 +37,8 @@
             <h1>Modern Spor Analizi</h1>
             <p>En güncel spor haberleri, derin analizler ve uzman görüşleri</p>
             <div class="hero-buttons">
-                <a href="#futbol" class="btn btn-primary">Futbol</a>
-                <a href="#basketbol" class="btn btn-secondary">Basketbol</a>
+                <a href="#articles" class="btn btn-primary">Yazıları Oku</a>
+                <a href="#write" class="btn btn-secondary">Yazı Yaz</a>
             </div>
         </div>
         <div class="hero-image">
@@ -288,66 +50,161 @@
         </div>
     </section>
 
-    <!-- Sports Categories Section -->
-    <section class="sports-categories">
+    <!-- Articles Section -->
+    <section id="articles" class="articles-section">
         <div class="container">
             <div class="section-header">
-                <h2>Spor Kategorileri</h2>
-                <p>En sevdiğiniz sporları keşfedin</p>
+                <h2>Son Yazılar</h2>
+                <p>Spor dünyasından en güncel analizler</p>
             </div>
             
-            <div class="sports-grid">
-                <div class="sport-card" id="futbol">
-                    <div class="sport-icon">
-                        <i class="fas fa-futbol"></i>
+            <div class="articles-grid">
+                <article class="article-card featured">
+                    <div class="article-image">
+                        <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600" alt="Futbol">
+                        <div class="article-category">Futbol</div>
                     </div>
-                    <h3>Futbol</h3>
-                    <p>Dünya'nın en popüler sporu</p>
-                </div>
+                    <div class="article-content">
+                        <h3>2024 Avrupa Şampiyonası'nda Şok Sonuçlar</h3>
+                        <p>Avrupa'nın en büyük futbol turnuvasında yaşanan sürpriz galibiyetler ve takım analizleri...</p>
+                        <div class="article-meta">
+                            <span class="author">
+                                <i class="fas fa-user"></i>
+                                Ahmet Yılmaz
+                            </span>
+                            <span class="date">
+                                <i class="fas fa-calendar"></i>
+                                15 Ocak 2024
+                            </span>
+                        </div>
+                        <a href="#" class="read-more">Devamını Oku <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
 
-                <div class="sport-card" id="basketbol">
-                    <div class="sport-icon">
-                        <i class="fas fa-basketball-ball"></i>
+                <article class="article-card">
+                    <div class="article-image">
+                        <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=600" alt="Basketbol">
+                        <div class="article-category">Basketbol</div>
                     </div>
-                    <h3>Basketbol</h3>
-                    <p>NBA ve yerel ligler</p>
-                </div>
+                    <div class="article-content">
+                        <h3>NBA'de Yeni Sezon Beklentileri</h3>
+                        <p>Bu sezon hangi takımların şampiyonluk yarışında öne çıkacağı...</p>
+                        <div class="article-meta">
+                            <span class="author">
+                                <i class="fas fa-user"></i>
+                                Mehmet Kaya
+                            </span>
+                            <span class="date">
+                                <i class="fas fa-calendar"></i>
+                                12 Ocak 2024
+                            </span>
+                        </div>
+                        <a href="#" class="read-more">Devamını Oku <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
 
-                <div class="sport-card" id="voleybol">
-                    <div class="sport-icon">
-                        <i class="fas fa-volleyball-ball"></i>
+                <article class="article-card">
+                    <div class="article-image">
+                        <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=600" alt="Tenis">
+                        <div class="article-category">Tenis</div>
                     </div>
-                    <h3>Voleybol</h3>
-                    <p>Hızlı tempolu oyun</p>
-                </div>
-
-                <div class="sport-card" id="formula1">
-                    <div class="sport-icon">
-                        <i class="fas fa-car"></i>
+                    <div class="article-content">
+                        <h3>Grand Slam Sezonu Başlıyor</h3>
+                        <p>Avustralya Açık'ta hangi oyuncuların favori olduğu...</p>
+                        <div class="article-meta">
+                            <span class="author">
+                                <i class="fas fa-user"></i>
+                                Ayşe Demir
+                            </span>
+                            <span class="date">
+                                <i class="fas fa-calendar"></i>
+                                10 Ocak 2024
+                            </span>
+                        </div>
+                        <a href="#" class="read-more">Devamını Oku <i class="fas fa-arrow-right"></i></a>
                     </div>
-                    <h3>Formula 1</h3>
-                    <p>Motor sporları kralı</p>
-                </div>
-
-                <div class="sport-card" id="tenis">
-                    <div class="sport-icon">
-                        <i class="fas fa-table-tennis"></i>
-                    </div>
-                    <h3>Tenis</h3>
-                    <p>Grand Slam turnuvaları</p>
-                </div>
-
-                <div class="sport-card" id="snooker">
-                    <div class="sport-icon">
-                        <i class="fas fa-circle"></i>
-                    </div>
-                    <h3>Snooker</h3>
-                    <p>Strateji ve hassasiyet</p>
-                </div>
+                </article>
             </div>
         </div>
     </section>
 
+    <!-- Write Article Section -->
+    <section id="write" class="write-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Köşe Yazısı Yaz</h2>
+                <p>Düşüncelerini spor dünyasıyla paylaş</p>
+            </div>
+            
+            <div class="write-form-container">
+                <form class="write-form" id="articleForm">
+                    <div class="form-group">
+                        <label for="title">Başlık</label>
+                        <input type="text" id="title" name="title" placeholder="Yazınızın başlığını girin" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="category">Kategori</label>
+                        <select id="category" name="category" required>
+                            <option value="">Kategori seçin</option>
+                            <option value="futbol">Futbol</option>
+                            <option value="basketbol">Basketbol</option>
+                            <option value="tenis">Tenis</option>
+                            <option value="voleybol">Voleybol</option>
+                            <option value="atletizm">Atletizm</option>
+                            <option value="diger">Diğer</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="author">Yazar Adı</label>
+                        <input type="text" id="author" name="author" placeholder="Adınızı girin" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="excerpt">Özet</label>
+                        <textarea id="excerpt" name="excerpt" placeholder="Yazınızın kısa özetini girin" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="content">İçerik</label>
+                        <div class="editor-toolbar">
+                            <button type="button" class="toolbar-btn" data-command="bold" title="Kalın">
+                                <i class="fas fa-bold"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="italic" title="İtalik">
+                                <i class="fas fa-italic"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="underline" title="Altı Çizili">
+                                <i class="fas fa-underline"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="insertUnorderedList" title="Madde İşareti">
+                                <i class="fas fa-list-ul"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="insertOrderedList" title="Numaralı Liste">
+                                <i class="fas fa-list-ol"></i>
+                            </button>
+                        </div>
+                        <div id="content" class="content-editor" contenteditable="true" placeholder="Yazınızın içeriğini buraya yazın..."></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="image">Kapak Görseli URL</label>
+                        <input type="url" id="image" name="image" placeholder="Görsel URL'sini girin">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="previewBtn">
+                            <i class="fas fa-eye"></i> Önizleme
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Yayınla
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
 
     <!-- About Section -->
     <section id="about" class="about-section">
@@ -393,14 +250,14 @@
                         <i class="fas fa-envelope"></i>
                         <div>
                             <h4>E-posta</h4>
-                            <p>selimokur35@gmail.com</p>
+                            <p>info@sportblog.com</p>
                         </div>
                     </div>
                     <div class="contact-item">
                         <i class="fas fa-phone"></i>
                         <div>
                             <h4>Telefon</h4>
-                            <p>+90 543 437 38 31</p>
+                            <p>+90 212 555 0123</p>
                         </div>
                     </div>
                     <div class="contact-item">
@@ -433,28 +290,15 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <div class="footer-logo logo-container">
-                        <div class="gamescore-logo">
-                            <div class="logo-quarter top-left">
-                                <i class="fas fa-basketball-ball"></i>
-                            </div>
-                            <div class="logo-quarter top-right">
-                                <i class="fas fa-car"></i>
-                            </div>
-                            <div class="logo-quarter bottom-left">
-                                <i class="fas fa-table-tennis"></i>
-                            </div>
-                            <div class="logo-quarter bottom-right">
-                                <i class="fas fa-stopwatch"></i>
-                            </div>
-                        </div>
-                        <span class="logo-text">OyunSkoru</span>
+                    <div class="footer-logo">
+                        <i class="fas fa-futbol"></i>
+                        <span>SportBlog</span>
                     </div>
                     <p>Spor dünyasının kalbi burada atıyor.</p>
                     <div class="social-links">
                         <a href="#"><i class="fab fa-facebook"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="https://instagram.com/oyunskoru_"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
                         <a href="#"><i class="fab fa-linkedin"></i></a>
                     </div>
                 </div>
@@ -462,12 +306,10 @@
                 <div class="footer-section">
                     <h4>Kategoriler</h4>
                     <ul>
-                        <li><a href="#futbol">Futbol</a></li>
-                        <li><a href="#basketbol">Basketbol</a></li>
-                        <li><a href="#voleybol">Voleybol</a></li>
-                        <li><a href="#formula1">Formula 1</a></li>
-                        <li><a href="#tenis">Tenis</a></li>
-                        <li><a href="#snooker">Snooker</a></li>
+                        <li><a href="#">Futbol</a></li>
+                        <li><a href="#">Basketbol</a></li>
+                        <li><a href="#">Tenis</a></li>
+                        <li><a href="#">Voleybol</a></li>
                     </ul>
                 </div>
                 
@@ -475,10 +317,9 @@
                     <h4>Sayfalar</h4>
                     <ul>
                         <li><a href="#home">Ana Sayfa</a></li>
-                        <li><a href="#futbol">Futbol</a></li>
-                        <li><a href="#basketbol">Basketbol</a></li>
-                        <li><a href="#formula1">Formula 1</a></li>
-                        <li><a href="#contact">İletişim</a></li>
+                        <li><a href="#articles">Yazılar</a></li>
+                        <li><a href="#write">Yazı Yaz</a></li>
+                        <li><a href="#about">Hakkımızda</a></li>
                     </ul>
                 </div>
                 
@@ -493,13 +334,24 @@
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2024 OyunSkoru. Tüm hakları saklıdır.</p>
+                <p>&copy; 2024 SportBlog. Tüm hakları saklıdır.</p>
             </div>
         </div>
     </footer>
 
+    <!-- Preview Modal -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Yazı Önizlemesi</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body" id="previewContent">
+                <!-- Preview content will be inserted here -->
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
 </html>
-
