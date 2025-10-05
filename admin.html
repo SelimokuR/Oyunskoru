@@ -50,6 +50,7 @@
                 <div id="usersTools" style="margin-top:12px; display:flex; gap:8px; align-items:center;">
                     <input type="text" id="userSearch" placeholder="Kullanıcı ara" style="flex:1;padding:10px;border:1px solid #e2e8f0;border-radius:8px;">
                     <button id="userSearchBtn" class="btn btn-secondary">Ara</button>
+                    <button id="refreshUsersBtn" class="btn btn-secondary">Yenile</button>
                 </div>
             </div>
         </div>
@@ -95,6 +96,22 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+    (function(){
+        const adminLogoutLink = document.getElementById('adminLogoutLink');
+        const adminPanel = document.getElementById('adminPanel');
+        const adminLogin = document.getElementById('adminLogin');
+        if (localStorage.getItem('isAdmin') === 'true') {
+            adminLogoutLink.style.display = 'inline';
+        }
+        adminLogoutLink.addEventListener('click', function(e){
+            e.preventDefault();
+            localStorage.removeItem('isAdmin');
+            localStorage.removeItem('currentUser');
+            window.location.reload();
+        });
+    })();
+    </script>
 </body>
 </html>
 

@@ -8,6 +8,10 @@ const previewContent = document.getElementById('previewContent');
 const closeModal = document.querySelector('#previewModal .close');
 // Signup modal elements
 const signupLink = document.getElementById('signupLink');
+const loginLink = document.getElementById('loginLink');
+const loginModal = document.getElementById('loginModal');
+const loginClose = document.getElementById('loginClose');
+const loginForm = document.getElementById('loginForm');
 const signupModal = document.getElementById('signupModal');
 const signupClose = document.getElementById('signupClose');
 const signupForm = document.getElementById('signupForm');
@@ -58,6 +62,30 @@ function getCurrentUser() {
     try { return JSON.parse(localStorage.getItem('currentUser') || 'null'); } catch { return null; }
 }
 
+// Auto-login functionality
+function checkAutoLogin() {
+    const autoLogin = localStorage.getItem('autoLogin');
+    const currentUser = getCurrentUser();
+    
+    if (autoLogin === 'true' && currentUser && currentUser.rememberMe) {
+        const logoutLink = document.getElementById('logoutLink');
+        const signupLink = document.getElementById('signupLink');
+        const loginLink = document.getElementById('loginLink');
+        
+        if (logoutLink) logoutLink.style.display = 'inline';
+        if (signupLink) signupLink.style.display = 'none';
+        if (loginLink) loginLink.style.display = 'none';
+    }
+}
+
+function getTextExcerpt(html, maxLen = 140) {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html || '';
+    const text = (tmp.textContent || '').replace(/\s+/g, ' ').trim();
+    if (text.length <= maxLen) return text;
+    return text.slice(0, maxLen).trimEnd() + '…';
+}
+
 function filterArticlesByCategory(category) {
     const articles = (JSON.parse(localStorage.getItem('articles') || '[]')).filter(a => a.status === 'approved' && (a.category || '').toLowerCase() === category.toLowerCase());
     const articlesGrid = document.querySelector('.articles-grid');
@@ -101,6 +129,57 @@ if (signupModal) {
             signupModal.style.display = 'none';
             document.body.style.overflow = 'auto';
         }
+    });
+}
+// Login modal
+if (loginLink) {
+    loginLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (loginModal) {
+            loginModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+    });
+}
+if (loginClose) {
+    loginClose.addEventListener('click', () => {
+        loginModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    });
+}
+if (loginModal) {
+    window.addEventListener('click', (e) => {
+        if (e.target === loginModal) {
+            loginModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    });
+}
+if (loginForm) {
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const username = document.getElementById('li_username').value.trim();
+        const password = document.getElementById('li_password').value;
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const u = users.find(x => x.username === username && x.password === password);
+        if (!u) { showNotification('Kullanıcı adı veya şifre hatalı.', 'error'); return; }
+        const rememberMe = document.getElementById('rememberMe').checked;
+        localStorage.setItem('currentUser', JSON.stringify({ username, rememberMe }));
+        showNotification('Giriş başarılı. Hoş geldiniz, ' + username, 'success');
+        loginModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        if (logoutLink) logoutLink.style.display = 'inline';
+        if (signupLink) signupLink.style.display = 'none';
+        if (loginLink) loginLink.style.display = 'none';
+        
+        // Auto-login on next visit if remember me is checked
+        if (rememberMe) {
+            localStorage.setItem('autoLogin', 'true');
+        } else {
+            localStorage.removeItem('autoLogin');
+        }
+        
+        setTimeout(() => window.location.reload(), 200);
     });
 }
 if (signupForm) {
@@ -289,7 +368,7 @@ if (articleForm) articleForm.addEventListener('submit', (e) => {
         title: formData.get('title'),
         category: formData.get('category'),
         author: formData.get('author'),
-        excerpt: '',
+            excerpt: getTextExcerpt(contentEditor.innerHTML, 140),
         content: contentEditor.innerHTML,
             image: imageOverride || formData.get('image'),
             tags: (formData.get('tags') || '').split(',').map(t => t.trim()).filter(Boolean),
@@ -411,7 +490,7 @@ function createArticleCard(article) {
                 <span class="views"><i class="fas fa-eye"></i> ${parseInt(article.views || 0, 10)}</span>
             </div>
             <div style="display:flex; gap:10px; align-items:center;">
-                <a href="#" class="read-more" onclick="showFullArticle(${article.id})">Devamını Oku <i class="fas fa-arrow-right"></i></a>
+            <a href="#" class="read-more" onclick="showFullArticle(${article.id})">Devamını Oku <i class="fas fa-arrow-right"></i></a>
                 ${localStorage.getItem('isAdmin') === 'true' ? `<button class=\"btn-del-card\" data-id=\"${article.id}\" style=\"border:none;background:#fecaca;padding:6px 10px;border-radius:6px;cursor:pointer;\"><i class=\"fas fa-trash\"></i> Sil</button>` : ''}
             </div>
         </div>
@@ -458,10 +537,15 @@ function showFullArticle(articleId) {
                     <hr style="margin: 1.5rem 0;"/>
                     <h4 style="margin-bottom: 0.75rem; color:#2d3748;">Yorumlar</h4>
                     <div id="comments_list_${article.id}" style="display:flex; flex-direction:column; gap:10px; margin-bottom:1rem;">
-                        ${comments.map((c, idx) => `
+                        ${comments.map((c, idx) => {
+                            const user = JSON.parse(localStorage.getItem('users') || '[]').find(u => u.username === c.username);
+                            return `
                             <div data-idx=\"${idx}\" style=\"background:#f7fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px;\">
                                 <div style=\"display:flex;align-items:center;gap:6px;justify-content:space-between;\">
-                                    <div style=\"font-weight:600;color:#4a5568;\"><i class=\"fas fa-user\"></i> ${c.username} <span style=\"color:#a0aec0;font-weight:400;\">${new Date(c.date).toLocaleString('tr-TR')}</span></div>
+                                    <div style=\"display:flex;align-items:center;gap:8px;font-weight:600;color:#4a5568;\">
+                                        ${user && user.avatar ? `<img src=\"${user.avatar}\" alt=\"${c.username}\" style=\"width:24px;height:24px;border-radius:50%;object-fit:cover;\">` : '<i class=\"fas fa-user-circle\" style=\"color:#64748b;\"></i>'}
+                                        ${c.username} <span style=\"color:#a0aec0;font-weight:400;\">${new Date(c.date).toLocaleString('tr-TR')}</span>
+                                    </div>
                                     <div>
                                         <button class=\"btn-like\" style=\"border:none;background:#e2e8f0;padding:4px 8px;border-radius:6px;cursor:pointer;\"><i class=\"fas fa-thumbs-up\"></i> <span>${parseInt(c.likes||0,10)}</span></button>
                                         <button class=\"btn-del\" style=\"border:none;background:#fecaca;padding:4px 8px;border-radius:6px;cursor:pointer;\"><i class=\"fas fa-trash\"></i></button>
@@ -469,7 +553,8 @@ function showFullArticle(articleId) {
                                 </div>
                                 <div style=\"color:#2d3748;line-height:1.6;margin-top:6px;\">${c.text}</div>
                             </div>
-                        `).join('')}
+                        `;
+                        }).join('')}
                     </div>
                     ${user ? `
                     <form id=\"comment_form_${article.id}\" class=\"contact-form\" style=\"margin-top:0.5rem;\">
@@ -630,6 +715,9 @@ const observer = new IntersectionObserver((entries) => {
 
 // Observe elements for animation
 document.addEventListener('DOMContentLoaded', () => {
+    // Check for auto-login on page load
+    checkAutoLogin();
+    
     // Load saved articles
     loadArticles();
     
@@ -710,13 +798,26 @@ document.addEventListener('DOMContentLoaded', () => {
             <table style="width:100%;border-collapse:collapse;">
                 <thead>
                     <tr style="text-align:left;border-bottom:1px solid #e2e8f0;">
+                        <th style="padding:6px;">Profil</th>
                         <th style="padding:6px;">Kullanıcı Adı</th>
                         <th style="padding:6px;">Yaş</th>
                         <th style="padding:6px;">Cinsiyet</th>
+                        <th style="padding:6px;">İşlemler</th>
                     </tr>
                 </thead>
                 <tbody>
-                    ${users.map(u => `<tr><td style=\"padding:6px;border-bottom:1px solid #f1f5f9;\">${u.username}</td><td style=\"padding:6px;border-bottom:1px solid #f1f5f9;\">${u.age ?? ''}</td><td style=\"padding:6px;border-bottom:1px solid #f1f5f9;\">${u.gender ?? ''}</td></tr>`).join('')}
+                    ${users.map(u => `<tr>
+                        <td style="padding:6px;border-bottom:1px solid #f1f5f9;text-align:center;">
+                            ${u.avatar ? `<img src="${u.avatar}" alt="${u.username}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">` : '<i class="fas fa-user-circle" style="font-size:24px;color:#64748b;"></i>'}
+                        </td>
+                        <td style="padding:6px;border-bottom:1px solid #f1f5f9;">${u.username}</td>
+                        <td style="padding:6px;border-bottom:1px solid #f1f5f9;">${u.age ?? ''}</td>
+                        <td style="padding:6px;border-bottom:1px solid #f1f5f9;">${u.gender ?? ''}</td>
+                        <td style="padding:6px;border-bottom:1px solid #f1f5f9;">
+                            <button onclick="banUser('${u.username}')" class="btn btn-secondary" style="font-size:12px;padding:4px 8px;margin-right:4px;">Banla</button>
+                            <button onclick="deleteUser('${u.username}')" class="btn btn-danger" style="font-size:12px;padding:4px 8px;">Sil</button>
+                        </td>
+                    </tr>`).join('')}
                 </tbody>
             </table>
             </div>
@@ -737,8 +838,70 @@ document.addEventListener('DOMContentLoaded', () => {
             <div style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:10px;padding:10px;">Onaylı Yazı: <strong>${totalApproved}</strong></div>
             <div style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:10px;padding:10px;">Üye Sayısı: <strong>${users.length}</strong></div>
         </div>`;
+
+        // User search functionality
+        const userSearch = document.getElementById('userSearch');
+        const userSearchBtn = document.getElementById('userSearchBtn');
+        const refreshUsersBtn = document.getElementById('refreshUsersBtn');
+        
+        if (userSearchBtn) {
+            userSearchBtn.addEventListener('click', function() {
+                const searchTerm = userSearch.value.trim().toLowerCase();
+                const filteredUsers = users.filter(u => 
+                    u.username.toLowerCase().includes(searchTerm) ||
+                    (u.age && u.age.toString().includes(searchTerm)) ||
+                    (u.gender && u.gender.toLowerCase().includes(searchTerm))
+                );
+                
+                const tbody = usersWrap.querySelector('tbody');
+                if (tbody && filteredUsers.length) {
+                    tbody.innerHTML = filteredUsers.map(u => `<tr>
+                        <td style="padding:6px;border-bottom:1px solid #f1f5f9;text-align:center;">
+                            ${u.avatar ? `<img src="${u.avatar}" alt="${u.username}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">` : '<i class="fas fa-user-circle" style="font-size:24px;color:#64748b;"></i>'}
+                        </td>
+                        <td style="padding:6px;border-bottom:1px solid #f1f5f9;">${u.username}</td>
+                        <td style="padding:6px;border-bottom:1px solid #f1f5f9;">${u.age ?? ''}</td>
+                        <td style="padding:6px;border-bottom:1px solid #f1f5f9;">${u.gender ?? ''}</td>
+                        <td style="padding:6px;border-bottom:1px solid #f1f5f9;">
+                            <button onclick="banUser('${u.username}')" class="btn btn-secondary" style="font-size:12px;padding:4px 8px;margin-right:4px;">Banla</button>
+                            <button onclick="deleteUser('${u.username}')" class="btn btn-danger" style="font-size:12px;padding:4px 8px;">Sil</button>
+                        </td>
+                    </tr>`).join('');
+                }
+            });
+        }
+        
+        if (refreshUsersBtn) {
+            refreshUsersBtn.addEventListener('click', function() {
+                userSearch.value = '';
+                window.location.reload();
+            });
+        }
     }
 });
+
+// User management functions
+function banUser(username) {
+    if (confirm(`${username} kullanıcısını banlamak istediğinizden emin misiniz?`)) {
+        let bannedUsers = JSON.parse(localStorage.getItem('bannedUsers') || '[]');
+        if (!bannedUsers.includes(username)) {
+            bannedUsers.push(username);
+            localStorage.setItem('bannedUsers', JSON.stringify(bannedUsers));
+            showNotification(`${username} kullanıcısı banlandı.`, 'success');
+            setTimeout(() => window.location.reload(), 1000);
+        }
+    }
+}
+
+function deleteUser(username) {
+    if (confirm(`${username} kullanıcısını kalıcı olarak silmek istediğinizden emin misiniz? Bu işlem geri alınamaz!`)) {
+        let users = JSON.parse(localStorage.getItem('users') || '[]');
+        users = users.filter(u => u.username !== username);
+        localStorage.setItem('users', JSON.stringify(users));
+        showNotification(`${username} kullanıcısı silindi.`, 'success');
+        setTimeout(() => window.location.reload(), 1000);
+    }
+}
 
 // Admin: render and approve/reject pending posts
 function renderPending() {
