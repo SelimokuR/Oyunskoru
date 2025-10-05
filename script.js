@@ -81,9 +81,12 @@ if (logoutLink) {
     logoutLink.addEventListener('click', (e) => {
         e.preventDefault();
         localStorage.removeItem('currentUser');
+        localStorage.removeItem('isAdmin');
         showNotification('Çıkış yapıldı.', 'info');
         logoutLink.style.display = 'none';
         if (signupLink) signupLink.style.display = 'inline';
+        const loginLinkEl = document.getElementById('loginLink');
+        if (loginLinkEl) loginLinkEl.style.display = 'inline';
     });
 }
 if (signupClose) {
@@ -113,19 +116,33 @@ if (signupForm) {
             showNotification('Lütfen tüm alanları doldurun.', 'error');
             return;
         }
-        let users = JSON.parse(localStorage.getItem('users') || '[]');
-        if (users.some(u => u.username === user.username)) {
-            showNotification('Bu kullanıcı adı zaten alınmış.', 'error');
-            return;
+        const avatarEl = document.getElementById('su_avatar');
+        const saveUser = (avatarData) => {
+            if (avatarData) user.avatar = avatarData;
+            let users = JSON.parse(localStorage.getItem('users') || '[]');
+            if (users.some(u => u.username === user.username)) {
+                showNotification('Bu kullanıcı adı zaten alınmış.', 'error');
+                return;
+            }
+            users.push(user);
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('currentUser', JSON.stringify({ username: user.username }));
+            showNotification('Kayıt başarılı! Hoş geldiniz, ' + user.username, 'success');
+            signupModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            if (logoutLink) logoutLink.style.display = 'inline';
+            if (signupLink) signupLink.style.display = 'none';
+            const loginLinkEl = document.getElementById('loginLink');
+            if (loginLinkEl) loginLinkEl.style.display = 'none';
+        };
+        if (avatarEl && avatarEl.files && avatarEl.files[0]) {
+            const reader = new FileReader();
+            reader.onload = () => saveUser(reader.result);
+            reader.onerror = () => saveUser('');
+            reader.readAsDataURL(avatarEl.files[0]);
+        } else {
+            saveUser('');
         }
-        users.push(user);
-        localStorage.setItem('users', JSON.stringify(users));
-        localStorage.setItem('currentUser', JSON.stringify({ username: user.username }));
-        showNotification('Kayıt başarılı! Hoş geldiniz, ' + user.username, 'success');
-        signupModal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-        if (logoutLink) logoutLink.style.display = 'inline';
-        if (signupLink) signupLink.style.display = 'none';
     });
 }
 
@@ -634,6 +651,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (user) {
         if (logoutLink) logoutLink.style.display = 'inline';
         if (signupLink) signupLink.style.display = 'none';
+        const loginLinkEl = document.getElementById('loginLink');
+        if (loginLinkEl) loginLinkEl.style.display = 'none';
     }
 
     // Category filtering by URL param
