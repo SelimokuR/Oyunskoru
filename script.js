@@ -158,9 +158,7 @@ function validateForm(formData) {
         errors.push('Yazar adı zorunludur.');
     }
     
-    if (!formData.excerpt.trim()) {
-        errors.push('Özet alanı zorunludur.');
-    }
+    // excerpt alanı kaldırıldı
     
     if (!contentEditor.textContent.trim()) {
         errors.push('İçerik alanı zorunludur.');
@@ -189,7 +187,7 @@ if (previewBtn) previewBtn.addEventListener('click', () => {
     const title = formData.get('title');
     const category = formData.get('category');
     const author = formData.get('author');
-    const excerpt = formData.get('excerpt');
+    const excerpt = '';
     const content = contentEditor.innerHTML;
     let imageUrl = formData.get('image');
     const fileElPrev = document.getElementById('imageFile');
@@ -274,7 +272,7 @@ if (articleForm) articleForm.addEventListener('submit', (e) => {
         title: formData.get('title'),
         category: formData.get('category'),
         author: formData.get('author'),
-        excerpt: formData.get('excerpt'),
+        excerpt: '',
         content: contentEditor.innerHTML,
             image: imageOverride || formData.get('image'),
             tags: (formData.get('tags') || '').split(',').map(t => t.trim()).filter(Boolean),
