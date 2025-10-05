@@ -737,14 +737,12 @@ function renderPending() {
         if (edit) {
             const a = all.find(x => x.id === id);
             if (!a) return;
-            const newTitle = prompt('Başlık', a.title);
-            const newExcerpt = prompt('Özet', a.excerpt);
-            const newCategory = prompt('Kategori', a.category);
-            a.title = newTitle ?? a.title;
-            a.excerpt = newExcerpt ?? a.excerpt;
-            a.category = newCategory ?? a.category;
-            localStorage.setItem('articles', JSON.stringify(all));
-            showNotification('Yazı güncellendi.', 'success');
+            openAdminEditModal(a, (updated) => {
+                const idx = all.findIndex(x => x.id === id);
+                all[idx] = { ...all[idx], ...updated };
+                localStorage.setItem('articles', JSON.stringify(all));
+                showNotification('Yazı güncellendi.', 'success');
+            });
         }
         if (reject) {
             all = all.filter(a => a.id !== id);
@@ -786,14 +784,14 @@ function renderPending() {
         if (edit) {
             const a = all.find(x => x.id === id);
             if (!a) return;
-            const newTitle = prompt('Başlık', a.title);
-            const newExcerpt = prompt('Özet', a.excerpt);
-            const newCategory = prompt('Kategori', a.category);
-            a.title = newTitle ?? a.title;
-            a.excerpt = newExcerpt ?? a.excerpt;
-            a.category = newCategory ?? a.category;
-            localStorage.setItem('articles', JSON.stringify(all));
-            showNotification('Yazı güncellendi.', 'success');
+            openAdminEditModal(a, (updated) => {
+                const idx = all.findIndex(x => x.id === id);
+                all[idx] = { ...all[idx], ...updated };
+                localStorage.setItem('articles', JSON.stringify(all));
+                showNotification('Yazı güncellendi.', 'success');
+                renderPending();
+                loadArticles();
+            });
         }
         if (del) {
             all = all.filter(a => a.id !== id);
@@ -802,6 +800,58 @@ function renderPending() {
         }
         renderPending();
         loadArticles();
+    };
+}
+
+// Admin edit modal logic
+function openAdminEditModal(article, onSave) {
+    const modal = document.getElementById('adminEditModal');
+    const closeBtn = document.getElementById('adminEditClose');
+    const cancelBtn = document.getElementById('adminEditCancel');
+    const form = document.getElementById('adminEditForm');
+    const idEl = document.getElementById('ae_id');
+    const tEl = document.getElementById('ae_title');
+    const cEl = document.getElementById('ae_category');
+    const eEl = document.getElementById('ae_excerpt');
+    const tgEl = document.getElementById('ae_tags');
+    const imgEl = document.getElementById('ae_image');
+    const imgFileEl = document.getElementById('ae_imageFile');
+
+    idEl.value = String(article.id);
+    tEl.value = article.title || '';
+    cEl.value = article.category || '';
+    eEl.value = article.excerpt || '';
+    tgEl.value = (article.tags || []).join(', ');
+    imgEl.value = article.image || '';
+
+    const hide = () => { modal.style.display = 'none'; document.body.style.overflow = 'auto'; };
+    if (closeBtn) closeBtn.onclick = hide;
+    if (cancelBtn) cancelBtn.onclick = hide;
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+
+    form.onsubmit = (ev) => {
+        ev.preventDefault();
+        const updated = {
+            title: tEl.value.trim(),
+            category: cEl.value.trim(),
+            excerpt: eEl.value.trim(),
+            tags: tgEl.value.split(',').map(x => x.trim()).filter(Boolean)
+        };
+        const done = (imageVal) => {
+            if (imageVal) updated.image = imageVal;
+            hide();
+            onSave(updated);
+        };
+        if (imgFileEl && imgFileEl.files && imgFileEl.files[0]) {
+            const reader = new FileReader();
+            reader.onload = () => done(reader.result);
+            reader.onerror = () => done('');
+            reader.readAsDataURL(imgFileEl.files[0]);
+        } else {
+            if (imgEl.value) updated.image = imgEl.value;
+            done(updated.image || '');
+        }
     };
 }
 

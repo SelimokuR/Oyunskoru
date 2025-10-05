@@ -433,6 +433,49 @@
         </div>
     </div>
 
+    <!-- Admin Edit Modal -->
+    <div id="adminEditModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Yazıyı Düzenle</h3>
+                <span class="close" id="adminEditClose">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="adminEditForm" class="write-form">
+                    <div class="form-group">
+                        <label for="ae_title">Başlık</label>
+                        <input type="text" id="ae_title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ae_category">Kategori</label>
+                        <input type="text" id="ae_category" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ae_excerpt">Özet</label>
+                        <textarea id="ae_excerpt" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="ae_tags">Hashtag'ler</label>
+                        <input type="text" id="ae_tags" placeholder="#futbol, #analiz">
+                    </div>
+                    <div class="form-group">
+                        <label for="ae_image">Kapak Görseli URL</label>
+                        <input type="url" id="ae_image" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label for="ae_imageFile">Kapak Görseli Yükle</label>
+                        <input type="file" id="ae_imageFile" accept="image/*">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="adminEditCancel">Vazgeç</button>
+                        <button type="submit" class="btn btn-primary">Kaydet</button>
+                    </div>
+                    <input type="hidden" id="ae_id">
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
     <script>
     // Send contact form to email via backend (optional enhancement placeholder)
