@@ -48,6 +48,14 @@ body {
     text-decoration: none;
 }
 
+.nav-logo img {
+    transition: transform 0.3s ease;
+}
+
+.nav-logo:hover img {
+    transform: scale(1.1);
+}
+
 .nav-logo i {
     margin-right: 10px;
     font-size: 1.8rem;
@@ -669,6 +677,14 @@ body {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
+}
+
+.footer-logo img {
+    transition: transform 0.3s ease;
+}
+
+.footer-logo:hover img {
+    transform: scale(1.1);
 }
 
 .footer-logo i {
