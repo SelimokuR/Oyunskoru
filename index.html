@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportBlog - Spor Köşe Yazıları</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-futbol"></i>
+                <span>SportBlog</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home">Ana Sayfa</a></li>
+                <li><a href="#articles">Yazılar</a></li>
+                <li><a href="#write">Yazı Yaz</a></li>
+                <li><a href="#about">Hakkımda</a></li>
+                <li><a href="#contact">İletişim</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Modern Spor Analizi</h1>
+            <p>En güncel spor haberleri, derin analizler ve uzman görüşleri</p>
+            <div class="hero-buttons">
+                <a href="#articles" class="btn btn-primary">Yazıları Oku</a>
+                <a href="#write" class="btn btn-secondary">Yazı Yaz</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="floating-card">
+                <i class="fas fa-trophy"></i>
+                <h3>Şampiyonluk Analizi</h3>
+                <p>Detaylı takım performans değerlendirmesi</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Articles Section -->
+    <section id="articles" class="articles-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Son Yazılar</h2>
+                <p>Spor dünyasından en güncel analizler</p>
+            </div>
+            
+            <div class="articles-grid">
+                <article class="article-card featured">
+                    <div class="article-image">
+                        <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600" alt="Futbol">
+                        <div class="article-category">Futbol</div>
+                    </div>
+                    <div class="article-content">
+                        <h3>2024 Avrupa Şampiyonası'nda Şok Sonuçlar</h3>
+                        <p>Avrupa'nın en büyük futbol turnuvasında yaşanan sürpriz galibiyetler ve takım analizleri...</p>
+                        <div class="article-meta">
+                            <span class="author">
+                                <i class="fas fa-user"></i>
+                                Ahmet Yılmaz
+                            </span>
+                            <span class="date">
+                                <i class="fas fa-calendar"></i>
+                                15 Ocak 2024
+                            </span>
+                        </div>
+                        <a href="#" class="read-more">Devamını Oku <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+
+                <article class="article-card">
+                    <div class="article-image">
+                        <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=600" alt="Basketbol">
+                        <div class="article-category">Basketbol</div>
+                    </div>
+                    <div class="article-content">
+                        <h3>NBA'de Yeni Sezon Beklentileri</h3>
+                        <p>Bu sezon hangi takımların şampiyonluk yarışında öne çıkacağı...</p>
+                        <div class="article-meta">
+                            <span class="author">
+                                <i class="fas fa-user"></i>
+                                Mehmet Kaya
+                            </span>
+                            <span class="date">
+                                <i class="fas fa-calendar"></i>
+                                12 Ocak 2024
+                            </span>
+                        </div>
+                        <a href="#" class="read-more">Devamını Oku <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+
+                <article class="article-card">
+                    <div class="article-image">
+                        <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=600" alt="Tenis">
+                        <div class="article-category">Tenis</div>
+                    </div>
+                    <div class="article-content">
+                        <h3>Grand Slam Sezonu Başlıyor</h3>
+                        <p>Avustralya Açık'ta hangi oyuncuların favori olduğu...</p>
+                        <div class="article-meta">
+                            <span class="author">
+                                <i class="fas fa-user"></i>
+                                Ayşe Demir
+                            </span>
+                            <span class="date">
+                                <i class="fas fa-calendar"></i>
+                                10 Ocak 2024
+                            </span>
+                        </div>
+                        <a href="#" class="read-more">Devamını Oku <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Write Article Section -->
+    <section id="write" class="write-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Köşe Yazısı Yaz</h2>
+                <p>Düşüncelerini spor dünyasıyla paylaş</p>
+            </div>
+            
+            <div class="write-form-container">
+                <form class="write-form" id="articleForm">
+                    <div class="form-group">
+                        <label for="title">Başlık</label>
+                        <input type="text" id="title" name="title" placeholder="Yazınızın başlığını girin" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="category">Kategori</label>
+                        <select id="category" name="category" required>
+                            <option value="">Kategori seçin</option>
+                            <option value="futbol">Futbol</option>
+                            <option value="basketbol">Basketbol</option>
+                            <option value="tenis">Tenis</option>
+                            <option value="voleybol">Voleybol</option>
+                            <option value="atletizm">Atletizm</option>
+                            <option value="diger">Diğer</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="author">Yazar Adı</label>
+                        <input type="text" id="author" name="author" placeholder="Adınızı girin" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="excerpt">Özet</label>
+                        <textarea id="excerpt" name="excerpt" placeholder="Yazınızın kısa özetini girin" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="content">İçerik</label>
+                        <div class="editor-toolbar">
+                            <button type="button" class="toolbar-btn" data-command="bold" title="Kalın">
+                                <i class="fas fa-bold"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="italic" title="İtalik">
+                                <i class="fas fa-italic"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="underline" title="Altı Çizili">
+                                <i class="fas fa-underline"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="insertUnorderedList" title="Madde İşareti">
+                                <i class="fas fa-list-ul"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="insertOrderedList" title="Numaralı Liste">
+                                <i class="fas fa-list-ol"></i>
+                            </button>
+                        </div>
+                        <div id="content" class="content-editor" contenteditable="true" placeholder="Yazınızın içeriğini buraya yazın..."></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="image">Kapak Görseli URL</label>
+                        <input type="url" id="image" name="image" placeholder="Görsel URL'sini girin">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="previewBtn">
+                            <i class="fas fa-eye"></i> Önizleme
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Yayınla
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Hakkımızda</h2>
+                    <p>SportBlog, spor tutkunları için kurulmuş modern bir platformdur. Amacımız, spor dünyasından en güncel haberleri ve derin analizleri okuyucularımızla buluşturmak.</p>
+                    <p>Deneyimli yazarlarımız ve spor analistlerimiz, futbol, basketbol, tenis ve daha birçok spor dalında kaliteli içerik üretmektedir.</p>
+                    <div class="stats">
+                        <div class="stat">
+                            <h3>500+</h3>
+                            <p>Yayınlanmış Yazı</p>
+                        </div>
+                        <div class="stat">
+                            <h3>10K+</h3>
+                            <p>Okur</p>
+                        </div>
+                        <div class="stat">
+                            <h3>50+</h3>
+                            <p>Yazar</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600" alt="Spor">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>İletişim</h2>
+                <p>Bizimle iletişime geçin</p>
+            </div>
+            
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>E-posta</h4>
+                            <p>info@sportblog.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>Telefon</h4>
+                            <p>+90 212 555 0123</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Adres</h4>
+                            <p>İstanbul, Türkiye</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <form class="contact-form">
+                    <div class="form-group">
+                        <input type="text" placeholder="Adınız" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="E-posta adresiniz" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="Mesajınız" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Gönder</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-futbol"></i>
+                        <span>SportBlog</span>
+                    </div>
+                    <p>Spor dünyasının kalbi burada atıyor.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Kategoriler</h4>
+                    <ul>
+                        <li><a href="#">Futbol</a></li>
+                        <li><a href="#">Basketbol</a></li>
+                        <li><a href="#">Tenis</a></li>
+                        <li><a href="#">Voleybol</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Sayfalar</h4>
+                    <ul>
+                        <li><a href="#home">Ana Sayfa</a></li>
+                        <li><a href="#articles">Yazılar</a></li>
+                        <li><a href="#write">Yazı Yaz</a></li>
+                        <li><a href="#about">Hakkımızda</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Haber Bülteni</h4>
+                    <p>En güncel spor haberlerini kaçırmayın!</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="E-posta adresiniz" required>
+                        <button type="submit">Abone Ol</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 SportBlog. Tüm hakları saklıdır.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Yazı Önizlemesi</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body" id="previewContent">
+                <!-- Preview content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
