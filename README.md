@@ -1,58 +1,57 @@
-# 🏆 OyunSkoru - Modern Spor Blog Sitesi
+# SportBlog - Spor Köşe Yazıları Sitesi
 
-Modern ve kullanıcı dostu spor blog sitesi. Farklı spor kategorilerinde güncel haberler ve analizler.
+## 🚀 GitHub Pages ile Yayınlama Adımları:
 
-## 🎮 Proje İçeriği
+### 1. GitHub'da Repository Oluşturun
+1. [GitHub.com](https://github.com) adresine gidin
+2. "New repository" butonuna tıklayın
+3. Repository adını `spor-sitesi` olarak girin
+4. "Public" seçin (ücretsiz hosting için)
+5. "Create repository" butonuna tıklayın
 
-### OyunSkoru Web Sitesi (`site.html`)
-- **6 Spor Kategorisi**: Futbol, Basketbol, Voleybol, Formula 1, Tenis, Snooker
-- **Modern Tasarım**: Responsive ve kullanıcı dostu arayüz
-- **Özel Logo**: 4 çeyrek daireden oluşan modern logo tasarımı
-- **İletişim Bilgileri**: Güncel iletişim bilgileri
+### 2. Dosyaları Yükleyin
+1. Oluşturduğunuz repository'ye gidin
+2. "Uploading an existing file" seçin
+3. Bu klasördeki tüm dosyaları sürükleyip bırakın:
+   - `index.html`
+   - `styles.css`
+   - `script.js`
+4. "Commit changes" butonuna tıklayın
 
-### Ray Koşucusu Oyunu (`yeni 1.html`)
-- **4 Şeritli Koşu Oyunu**: HTML5 Canvas ile geliştirilmiş
-- **Karakter Seçimi**: 4 farklı ninja kaplumbağa karakteri
-- **Oyun Mekanikleri**: Zıplama, kayma, araç kullanma, silah atma
+### 3. GitHub Pages'i Aktifleştirin
+1. Repository'de "Settings" sekmesine gidin
+2. Sol menüden "Pages" seçin
+3. "Source" altında "Deploy from a branch" seçin
+4. Branch olarak "main" seçin
+5. "Save" butonuna tıklayın
 
-## 🚀 Teknolojiler
+### 4. Site Adresinizi Alın
+- Birkaç dakika sonra siteniz şu adreste yayında olacak:
+- `https://kullaniciadi.github.io/spor-sitesi`
 
-- **HTML5**: Modern web standartları
-- **CSS3**: Responsive tasarım ve animasyonlar
-- **JavaScript**: Interaktif özellikler
-- **Font Awesome**: İkonlar
-- **Google Fonts**: Tipografi
+## 🔧 Diğer Hosting Seçenekleri:
 
-## 📱 Özellikler
+### Netlify (Ücretsiz)
+1. [Netlify.com](https://netlify.com) adresine gidin
+2. "New site from Git" seçin
+3. GitHub repository'nizi bağlayın
+4. Otomatik deploy olacak
 
-- ✅ Responsive tasarım (mobil uyumlu)
-- ✅ Modern logo tasarımı
-- ✅ Spor kategorileri
-- ✅ Smooth animasyonlar
-- ✅ Hover efektleri
-- ✅ Temiz kod yapısı
+### Vercel (Ücretsiz)
+1. [Vercel.com](https://vercel.com) adresine gidin
+2. GitHub hesabınızla giriş yapın
+3. Repository'nizi import edin
+4. Otomatik deploy olacak
 
-## 🎯 Spor Kategorileri
+## 📝 Notlar:
+- GitHub Pages ile yayınladığınızda, yazılarınız tüm ziyaretçilerle paylaşılır
+- LocalStorage kullandığımız için yazılar tarayıcıda saklanır
+- Gerçek bir veritabanı için backend gerekir
 
-1. **⚽ Futbol** - Dünya'nın en popüler sporu
-2. **🏀 Basketbol** - NBA ve yerel ligler
-3. **🏐 Voleybol** - Hızlı tempolu oyun
-4. **🏎️ Formula 1** - Motor sporları kralı
-5. **🏓 Tenis** - Grand Slam turnuvaları
-6. **⚫ Snooker** - Strateji ve hassasiyet
-
-## 📞 İletişim
-
-- **E-posta**: selimokur35@gmail.com
-- **Telefon**: +90 543 437 38 31
-- **Instagram**: [@oyunskoru_](https://instagram.com/oyunskoru_)
-
-## 📄 Lisans
-
-Bu proje kişisel kullanım için geliştirilmiştir.
-
----
-
-**Geliştirici**: Selim Okur  
-**Tarih**: 2024  
-**Versiyon**: 1.0
+## 🎯 Özellikler:
+- ✅ Modern responsive tasarım
+- ✅ Köşe yazısı yazma editörü
+- ✅ Önizleme modu
+- ✅ Kategori sistemi
+- ✅ Otomatik taslak kaydetme
+- ✅ Mobil uyumlu
