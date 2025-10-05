@@ -333,6 +333,28 @@ function loadArticles() {
             batch.forEach((article) => {
             const articleCard = createArticleCard(article);
             articlesGrid.appendChild(articleCard);
+                // enable tag click filter
+                articleCard.querySelectorAll('.article-tags .tag').forEach(tagEl => {
+                    tagEl.addEventListener('click', (ev) => {
+                        const t = tagEl.getAttribute('data-tag');
+                        if (t) {
+                            window.location.href = `index.html?kategori=${encodeURIComponent(t)}#articles`;
+                        }
+                    });
+                });
+                // admin delete on card
+                const delBtn = articleCard.querySelector('.btn-del-card');
+                if (delBtn) {
+                    delBtn.addEventListener('click', () => {
+                        if (localStorage.getItem('isAdmin') !== 'true') return;
+                        let all = JSON.parse(localStorage.getItem('articles') || '[]');
+                        const id = parseInt(delBtn.getAttribute('data-id'), 10);
+                        all = all.filter(a => a.id !== id);
+                        localStorage.setItem('articles', JSON.stringify(all));
+                        showNotification('Yazı silindi.', 'info');
+                        loadArticles();
+                    });
+                }
         });
             nextIndex += batch.length;
         };
@@ -361,7 +383,7 @@ function createArticleCard(article) {
         </div>
         <div class="article-content">
             <h3>${article.title}</h3>
-            ${article.tags && article.tags.length ? `<div class="article-tags">${article.tags.map(t => `<span class=\"tag\">${t.startsWith('#') ? t : '#'+t}</span>`).join('')}</div>` : ''}
+            ${article.tags && article.tags.length ? `<div class="article-tags">${article.tags.map(t => `<span class=\"tag\" data-tag=\"${(t.startsWith('#')?t.slice(1):t)}\">${t.startsWith('#') ? t : '#'+t}</span>`).join('')}</div>` : ''}
             <p>${article.excerpt}</p>
             <div class="article-meta">
                 <span class="author" style="display:none;"></span>
@@ -371,7 +393,10 @@ function createArticleCard(article) {
                 </span>
                 <span class="views"><i class="fas fa-eye"></i> ${parseInt(article.views || 0, 10)}</span>
             </div>
-            <a href="#" class="read-more" onclick="showFullArticle(${article.id})">Devamını Oku <i class="fas fa-arrow-right"></i></a>
+            <div style="display:flex; gap:10px; align-items:center;">
+                <a href="#" class="read-more" onclick="showFullArticle(${article.id})">Devamını Oku <i class="fas fa-arrow-right"></i></a>
+                ${localStorage.getItem('isAdmin') === 'true' ? `<button class=\"btn-del-card\" data-id=\"${article.id}\" style=\"border:none;background:#fecaca;padding:6px 10px;border-radius:6px;cursor:pointer;\"><i class=\"fas fa-trash\"></i> Sil</button>` : ''}
+            </div>
         </div>
     `;
     

@@ -378,6 +378,7 @@ body {
     font-size: 0.8rem;
     font-weight: 600;
 }
+.article-tags .tag:hover { background: #e2e8f0; cursor: pointer; }
 
 .article-meta {
     display: flex;
