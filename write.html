@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oyunskoru - Yazı Yaz</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="logo.png" alt="Oyunskoru" style="width:32px;height:32px;border-radius:6px;margin-right:10px;object-fit:cover;" onerror="this.replaceWith(Object.assign(document.createElement('i'),{className:'fas fa-futbol'}));" />
+                <span>Oyunskoru</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html#home">Ana Sayfa</a></li>
+                <li><a href="index.html#articles">Yazılar</a></li>
+                <li><a href="#" id="signupLink">Üye Ol</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <section id="write" class="write-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Köşe Yazısı Yaz</h2>
+                <p>Bilgileri doldurun; yazınız belirlenen e-postaya gönderilsin.</p>
+            </div>
+            <div class="write-form-container">
+                <form class="write-form" id="articleForm">
+                    <div class="form-group">
+                        <label for="title">Başlık</label>
+                        <input type="text" id="title" name="title" placeholder="Yazınızın başlığını girin" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Kategori</label>
+                        <select id="category" name="category" required>
+                            <option value="">Kategori seçin</option>
+                            <option value="Futbol">Futbol</option>
+                            <option value="Basketbol">Basketbol</option>
+                            <option value="Tenis">Tenis</option>
+                            <option value="Voleybol">Voleybol</option>
+                            <option value="Atletizm">Atletizm</option>
+                            <option value="F1">F1</option>
+                            <option value="Bilardo">Bilardo</option>
+                            <option value="Diğer">Diğer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="author">Yazar Adı</label>
+                        <input type="text" id="author" name="author" placeholder="Adınızı girin" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="excerpt">Özet</label>
+                        <textarea id="excerpt" name="excerpt" placeholder="Yazınızın kısa özetini girin" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="content">İçerik</label>
+                        <div class="editor-toolbar">
+                            <button type="button" class="toolbar-btn" data-command="bold" title="Kalın"><i class="fas fa-bold"></i></button>
+                            <button type="button" class="toolbar-btn" data-command="italic" title="İtalik"><i class="fas fa-italic"></i></button>
+                            <button type="button" class="toolbar-btn" data-command="underline" title="Altı Çizili"><i class="fas fa-underline"></i></button>
+                            <button type="button" class="toolbar-btn" data-command="insertUnorderedList" title="Madde İşareti"><i class="fas fa-list-ul"></i></button>
+                            <button type="button" class="toolbar-btn" data-command="insertOrderedList" title="Numaralı Liste"><i class="fas fa-list-ol"></i></button>
+                        </div>
+                        <div id="content" class="content-editor" contenteditable="true" placeholder="Yazınızın içeriğini buraya yazın..."></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="image">Kapak Görseli URL</label>
+                        <input type="url" id="image" name="image" placeholder="Görsel URL'sini girin">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="previewBtn" style="display:inline-flex;"><i class="fas fa-eye"></i> Önizleme</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Gönder</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <div id="previewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Yazı Önizlemesi</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body" id="previewContent"></div>
+        </div>
+    </div>
+
+    <!-- Sign Up Modal reused -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Üye Ol</h3>
+                <span class="close" id="signupClose">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="signupForm" class="contact-form">
+                    <div class="form-group"><input type="text" id="su_username" placeholder="Kullanıcı adı" required></div>
+                    <div class="form-group"><input type="password" id="su_password" placeholder="Şifre" required></div>
+                    <div class="form-group"><input type="number" id="su_age" placeholder="Yaş" min="1" required></div>
+                    <div class="form-group">
+                        <select id="su_gender" required>
+                            <option value="">Cinsiyet</option>
+                            <option value="Kadın">Kadın</option>
+                            <option value="Erkek">Erkek</option>
+                            <option value="Diğer">Diğer</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Kaydol</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+    // Submit to backend email endpoint as well
+    (function(){
+        const form = document.getElementById('articleForm');
+        if (!form) return;
+        form.addEventListener('submit', async (e) => {
+            // script.js already preventsDefault and saves; we also POST to server here
+            try {
+                const fd = new FormData(form);
+                const payload = {
+                    title: fd.get('title'),
+                    category: fd.get('category'),
+                    author: fd.get('author'),
+                    excerpt: fd.get('excerpt'),
+                    content: document.getElementById('content').innerHTML,
+                    image: fd.get('image')
+                };
+                await fetch('/send-article', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            } catch (err) {
+                // ignore failure; local save and notification handled in script.js
+            }
+        }, { once: true });
+    })();
+    </script>
+</body>
+</html>
+
+
