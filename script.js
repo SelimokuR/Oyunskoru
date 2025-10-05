@@ -172,12 +172,40 @@ function validateForm(formData) {
 // Preview Function
 if (previewBtn) previewBtn.addEventListener('click', () => {
     const formData = new FormData(articleForm);
+    const imageFileInput = document.getElementById('imageFile');
+    let imageDataUrl = '';
+    if (imageFileInput && imageFileInput.files && imageFileInput.files[0]) {
+        const file = imageFileInput.files[0];
+        // Convert to Data URL synchronously via FileReader in a blocking way using Promise
+        const toDataUrl = (file) => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+        // Note: we cannot await inside event without async; switching to async handler would be bigger change.
+        // Instead, we handle below by setTimeout after read completes.
+    }
     const title = formData.get('title');
     const category = formData.get('category');
     const author = formData.get('author');
     const excerpt = formData.get('excerpt');
     const content = contentEditor.innerHTML;
-    const imageUrl = formData.get('image');
+    let imageUrl = formData.get('image');
+    const fileElPrev = document.getElementById('imageFile');
+    if (fileElPrev && fileElPrev.files && fileElPrev.files[0]) {
+        const file = fileElPrev.files[0];
+        const reader = new FileReader();
+        reader.onload = () => {
+            imageUrl = reader.result;
+            renderPreview();
+        };
+        reader.onerror = renderPreview;
+        reader.readAsDataURL(file);
+        return;
+    }
+
+    function renderPreview() {
     
     const errors = validateForm({
         title, category, author, excerpt, content
@@ -217,6 +245,7 @@ if (previewBtn) previewBtn.addEventListener('click', () => {
     if (previewContent) previewContent.innerHTML = previewHTML;
     if (previewModal) previewModal.style.display = 'block';
     document.body.style.overflow = 'hidden';
+    }
 });
 
 // Close Modal
@@ -240,37 +269,40 @@ if (articleForm) articleForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
     const formData = new FormData(articleForm);
-    const articleData = {
-        title: formData.get('title'),
-        category: formData.get('category'),
-        author: formData.get('author'),
-        excerpt: formData.get('excerpt'),
-        content: contentEditor.innerHTML,
-        image: formData.get('image'),
-        date: new Date().toISOString(),
-        id: Date.now(),
-        status: 'pending'
-    };
-    
-    const errors = validateForm(articleData);
-    
-    if (errors.length > 0) {
-        alert('Lütfen aşağıdaki alanları doldurun:\n' + errors.join('\n'));
-        return;
+    function buildAndSaveArticle(imageOverride) {
+        const articleData = {
+            title: formData.get('title'),
+            category: formData.get('category'),
+            author: formData.get('author'),
+            excerpt: formData.get('excerpt'),
+            content: contentEditor.innerHTML,
+            image: imageOverride || formData.get('image'),
+            date: new Date().toISOString(),
+            id: Date.now(),
+            status: 'pending'
+        };
+        const errors = validateForm(articleData);
+        if (errors.length > 0) {
+            alert('Lütfen aşağıdaki alanları doldurun:\n' + errors.join('\n'));
+            return;
+        }
+        saveArticle(articleData);
+        showNotification('Yazınız moderatör onayına gönderildi!', 'success');
+        articleForm.reset();
+        contentEditor.innerHTML = '';
+        document.getElementById('articles').scrollIntoView({ behavior: 'smooth' });
     }
     
-    // Simulate saving article (moderation enabled)
-    saveArticle(articleData);
-    
-    // Notify moderation
-    showNotification('Yazınız moderatör onayına gönderildi!', 'success');
-    
-    // Reset form
-    articleForm.reset();
-    contentEditor.innerHTML = '';
-    
-    // Scroll to articles section
-    document.getElementById('articles').scrollIntoView({ behavior: 'smooth' });
+    // If a file is selected, read it and then save. Otherwise, save directly
+    const fileEl = document.getElementById('imageFile');
+    if (fileEl && fileEl.files && fileEl.files[0]) {
+        const reader = new FileReader();
+        reader.onload = () => buildAndSaveArticle(reader.result);
+        reader.onerror = () => buildAndSaveArticle('');
+        reader.readAsDataURL(fileEl.files[0]);
+    } else {
+        buildAndSaveArticle('');
+    }
 });
 
 // Save Article Function (simulated)
@@ -633,25 +665,39 @@ function renderPending() {
         <div style="border:1px solid #e2e8f0;border-radius:10px;padding:10px;margin-bottom:10px;">
             <div style="display:flex;justify-content:space-between;align-items:center;">
                 <strong>${a.title}</strong>
-                <span style="color:#718096;">${a.author} • ${new Date(a.date).toLocaleString('tr-TR')}</span>
+                <span style="color:#718096;">${new Date(a.date).toLocaleString('tr-TR')}</span>
             </div>
             <div style="color:#4a5568;margin:6px 0;">${a.excerpt}</div>
             <div style="display:flex;gap:8px;">
                 <button class="btn-approve" data-id="${a.id}" style="border:none;background:#bbf7d0;padding:6px 10px;border-radius:6px;cursor:pointer;">Onayla</button>
+                <button class="btn-edit" data-id="${a.id}" style="border:none;background:#dbeafe;padding:6px 10px;border-radius:6px;cursor:pointer;">Düzenle</button>
                 <button class="btn-reject" data-id="${a.id}" style="border:none;background:#fecaca;padding:6px 10px;border-radius:6px;cursor:pointer;">Sil</button>
             </div>
         </div>
     `).join('');
     listEl.onclick = (e) => {
         const approve = e.target.closest('.btn-approve');
+        const edit = e.target.closest('.btn-edit');
         const reject = e.target.closest('.btn-reject');
-        if (!approve && !reject) return;
+        if (!approve && !reject && !edit) return;
         let all = JSON.parse(localStorage.getItem('articles') || '[]');
-        const id = parseInt((approve || reject).getAttribute('data-id'), 10);
+        const id = parseInt((approve || reject || edit).getAttribute('data-id'), 10);
         if (approve) {
             all = all.map(a => a.id === id ? { ...a, status: 'approved' } : a);
             localStorage.setItem('articles', JSON.stringify(all));
             showNotification('Yazı onaylandı.', 'success');
+        }
+        if (edit) {
+            const a = all.find(x => x.id === id);
+            if (!a) return;
+            const newTitle = prompt('Başlık', a.title);
+            const newExcerpt = prompt('Özet', a.excerpt);
+            const newCategory = prompt('Kategori', a.category);
+            a.title = newTitle ?? a.title;
+            a.excerpt = newExcerpt ?? a.excerpt;
+            a.category = newCategory ?? a.category;
+            localStorage.setItem('articles', JSON.stringify(all));
+            showNotification('Yazı güncellendi.', 'success');
         }
         if (reject) {
             all = all.filter(a => a.id !== id);
